@@ -1,0 +1,21 @@
+!pip install openeo
+#lets explore some back end
+import openeo
+connection = openeo.connect("openeo.dataspace.copernicus.eu")
+print("connected successfully")
+#we can inspect the collections listed programmatically
+connection.list_collection_ids()
+connection.describe_collection('SENTINEL2_L1C')
+connection.list_processes()
+connection.authenticate_oidc()
+datacube = connection.load_collection(
+"SENTINEL2_L1C",
+spatial_extent={"west":36, "south":1, "east":38, "north":1},
+temporal_extent = ["2021-01-01","2021-04-20"],
+bands = ["B02","B04","B08"],
+max_cloud_cover = 85,
+)
+datacube = datacube.max_time()
+
+datacube.execute_batch()
+datacube.execute_batch("C:/Users/thuku/OneDrive/Documents/GeoSpatial Developments/Jupyter Notebook/SpatialDataCubes/data.tif")
